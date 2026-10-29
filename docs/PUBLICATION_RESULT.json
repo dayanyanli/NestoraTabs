@@ -1,0 +1,29 @@
+{
+  "repository_url": "https://github.com/dayanyanli/NestoraTabs",
+  "repository_id": 1438461380,
+  "release_url": "https://github.com/dayanyanli/NestoraTabs/releases/tag/v1.0.1-rc.1",
+  "release_id": 427906419,
+  "tag": "v1.0.1-rc.1",
+  "source_commit": "209951b53794cc6f882fe7f737733bd097937dba",
+  "prerelease": true,
+  "assets": [
+    {
+      "name": "nestoratabs-v1.0.1-candidate.zip",
+      "url": "https://github.com/dayanyanli/NestoraTabs/releases/download/v1.0.1-rc.1/nestoratabs-v1.0.1-candidate.zip",
+      "sha256": "85dc8efc31842a22bd2a05be6cf24eaf720c03eefaf5bf0b14f4c6e4ce143629",
+      "size": 42987,
+      "anonymous_download": "PASS"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "url": "https://github.com/dayanyanli/NestoraTabs/releases/download/v1.0.1-rc.1/SHA256SUMS.txt",
+      "sha256": "5cdd02cd85d37458f695bd0d239fe8c7b02be710dd42957da7bafde7a0233b32",
+      "size": 100,
+      "anonymous_download": "PASS"
+    }
+  ],
+  "anonymous_repository_access": "PASS",
+  "anonymous_release_access": "PASS",
+  "default_branch": "main",
+  "tag_commit_verified": true
+}

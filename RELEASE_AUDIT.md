@@ -30,3 +30,7 @@ The original TabNest 1.0.0 source/unpacked/ZIP baselines remain unchanged. All 1
 | Formal stable-release readiness | NOT PASSED; release/ has no official package |
 
 Candidate package: nestoratabs-v1.0.1-candidate.zip (19 allowlisted files), manifest.json at root. SHA256: 85dc8efc31842a22bd2a05be6cf24eaf720c03eefaf5bf0b14f4c6e4ce143629. No tests, personal data, profiles, Git metadata, logs or credentials included. See GITHUB_PUBLISH_REPORT.md for publication result and audited source commit.
+
+## Publication result
+
+SUCCESS: https://github.com/dayanyanli/NestoraTabs/releases/tag/v1.0.1-rc.1 . Source tag commit: `209951b53794cc6f882fe7f737733bd097937dba`. Public repo, release and both asset downloads were checked without authentication; downloaded bytes match local files. This remains a disclosed-risk prerelease, not a stable-release clearance. See GITHUB_PUBLISH_REPORT.md and docs/PUBLICATION_RESULT.json.

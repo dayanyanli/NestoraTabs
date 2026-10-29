@@ -1,7 +1,7 @@
 {
   "status": "PASS",
   "scope": "heuristic credential/personal-path scan, not a guarantee",
-  "files_scanned": 52,
-  "historical_blobs_scanned": 52,
+  "files_scanned": 53,
+  "historical_blobs_scanned": 55,
   "findings": []
 }
