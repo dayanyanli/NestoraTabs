@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NestoraTabs</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">NESTORATABS</p>
+          <h1>快速打开常用网站</h1>
+        </div>
+        <div class="header-actions">
+          <button class="header-secondary-button" id="manage-button" type="button" aria-label="管理配置" title="管理配置">
+            <span aria-hidden="true">⚙</span>
+          </button>
+          <button class="icon-button" id="create-group-button" type="button" aria-label="创建分组" title="创建分组">
+            <span aria-hidden="true">＋</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="current-page-card" aria-labelledby="current-page-heading">
+        <div class="current-page-label">
+          <span id="current-page-heading">当前网页</span>
+          <span class="current-page-status" id="current-page-status"></span>
+        </div>
+        <div class="current-page-content">
+          <span class="current-page-icon site-avatar" id="current-page-icon" aria-hidden="true">↗</span>
+          <span class="current-page-copy">
+            <strong id="current-page-title">正在读取…</strong>
+            <small id="current-page-url"></small>
+          </span>
+          <button class="current-page-add-button" id="add-current-page-button" type="button" disabled>添加到分组</button>
+        </div>
+      </section>
+
+      <button class="save-window-button" id="save-window-button" type="button">
+        <span class="button-icon" aria-hidden="true">▣</span>
+        <span>
+          <strong>保存当前窗口</strong>
+          <small>选择标签页并保存到分组</small>
+        </span>
+      </button>
+
+      <section class="groups-section" aria-labelledby="groups-heading">
+        <div class="section-heading">
+          <h2 id="groups-heading">我的分组</h2>
+          <span id="group-count" aria-live="polite"></span>
+        </div>
+        <div id="groups-list" class="groups-list"></div>
+      </section>
+    </main>
+
+    <template id="empty-state-template">
+      <div class="empty-state">
+        <div class="empty-icon" aria-hidden="true">↗</div>
+        <h3>还没有网站分组</h3>
+        <p>创建一个分组，或直接保存当前窗口的所有标签页。</p>
+        <button class="primary-button" data-action="create-first-group" type="button">创建第一个分组</button>
+      </div>
+    </template>
+
+    <template id="group-template">
+      <article class="group-card">
+        <div class="group-header">
+          <button class="drag-handle group-drag-handle" type="button" draggable="true" aria-label="拖动分组排序" title="拖动排序">⠿</button>
+          <span class="group-title-wrap">
+            <strong class="group-name"></strong>
+            <small class="site-count"></small>
+          </span>
+          <div class="group-actions">
+            <button class="open-group-button" data-action="open-group" type="button">全部打开</button>
+            <button class="force-open-button" data-action="force-open-group" type="button" title="忽略重复并打开全部网站">新开全部</button>
+            <button class="collapse-button" data-action="toggle-collapse" type="button" aria-label="收起分组" aria-expanded="true">
+              <span class="chevron" aria-hidden="true">⌄</span>
+            </button>
+            <button class="more-button" data-action="toggle-menu" type="button" aria-label="更多分组操作" aria-expanded="false">•••</button>
+            <div class="group-menu" hidden>
+              <button data-action="add-site" type="button">添加网站</button>
+              <button data-action="rename-group" type="button">修改名称</button>
+              <button data-action="duplicate-group" type="button">复制分组</button>
+              <button class="danger-text" data-action="delete-group" type="button">删除分组</button>
+            </div>
+          </div>
+        </div>
+        <div class="sites-list"></div>
+        <button class="add-site-button" data-action="add-site" type="button">＋ 添加网站</button>
+      </article>
+    </template>
+
+    <template id="site-template">
+      <div class="site-row">
+        <button class="drag-handle site-drag-handle" type="button" draggable="true" aria-label="拖动网站排序" title="拖动排序">⠿</button>
+        <button class="site-main" data-action="open-site" type="button">
+          <span class="site-avatar" aria-hidden="true"></span>
+          <span class="site-copy">
+            <strong class="site-name"></strong>
+            <small class="site-url"></small>
+          </span>
+          <span class="open-icon" aria-hidden="true">↗</span>
+        </button>
+        <button class="site-more-button" data-action="toggle-site-menu" type="button" aria-label="更多网站操作" aria-expanded="false">•••</button>
+        <div class="site-menu" hidden>
+          <button data-action="edit-site" type="button">编辑网站</button>
+          <button class="danger-text" data-action="delete-site" type="button">删除网站</button>
+        </div>
+      </div>
+    </template>
+
+    <dialog id="group-dialog" class="app-dialog">
+      <form id="group-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">GROUP</p>
+            <h2 id="group-dialog-title">创建分组</h2>
+          </div>
+          <button class="dialog-close" data-dialog-close type="button" aria-label="关闭">×</button>
+        </div>
+        <label for="group-name-input">分组名称</label>
+        <input id="group-name-input" name="name" type="text" maxlength="50" placeholder="例如：每日工作" autocomplete="off" required>
+        <p class="field-error" id="group-error" role="alert"></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" data-dialog-close type="button">取消</button>
+          <button class="primary-button" type="submit">保存</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="site-dialog" class="app-dialog">
+      <form id="site-form">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">WEBSITE</p>
+            <h2 id="site-dialog-title">添加网站</h2>
+          </div>
+          <button class="dialog-close" data-dialog-close type="button" aria-label="关闭">×</button>
+        </div>
+        <label for="site-name-input">网站名称</label>
+        <input id="site-name-input" name="name" type="text" maxlength="80" placeholder="例如：项目管理" autocomplete="off" required>
+        <label for="site-url-input">网址</label>
+        <input id="site-url-input" name="url" type="text" maxlength="2048" placeholder="https://example.com" autocomplete="off" required>
+        <p class="field-hint">不填写协议时，将自动使用 https://</p>
+        <p class="field-error" id="site-error" role="alert"></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" data-dialog-close type="button">取消</button>
+          <button class="primary-button" type="submit">保存</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="manage-dialog" class="app-dialog manage-dialog">
+      <div class="manage-panel">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">MANAGE</p>
+            <h2>管理配置</h2>
+          </div>
+          <button class="dialog-close" data-dialog-close type="button" aria-label="关闭">×</button>
+        </div>
+        <p class="manage-intro">备份或恢复全部分组、网站顺序和折叠状态。</p>
+        <div class="manage-options">
+          <button class="manage-option" id="export-button" type="button">
+            <span class="manage-option-icon" aria-hidden="true">↓</span>
+            <span><strong>导出配置</strong><small>下载 JSON 备份文件</small></span>
+          </button>
+          <button class="manage-option" id="import-button" type="button">
+            <span class="manage-option-icon" aria-hidden="true">↑</span>
+            <span><strong>导入配置</strong><small>从本地 JSON 文件恢复</small></span>
+          </button>
+          <button class="manage-option" id="bookmark-import-button" type="button">
+            <span class="manage-option-icon" aria-hidden="true">★</span>
+            <span><strong>从 Chrome 收藏夹导入</strong><small>选择一个收藏夹文件夹</small></span>
+          </button>
+        </div>
+        <button class="secondary-button" id="support-button" type="button">支持开发者</button>
+        <input id="import-file-input" type="file" accept=".json,application/json" aria-label="选择 JSON 配置文件" hidden>
+        <p class="field-error manage-error" id="manage-error" role="alert"></p>
+      </div>
+    </dialog>
+
+    <dialog id="import-mode-dialog" class="app-dialog import-mode-dialog">
+      <div class="manage-panel">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">IMPORT</p>
+            <h2>选择导入方式</h2>
+          </div>
+          <button class="dialog-close" data-dialog-close type="button" aria-label="关闭">×</button>
+        </div>
+        <p class="import-summary" id="import-summary"></p>
+        <div class="import-mode-options">
+          <button class="import-mode-button danger-outline" data-import-mode="replace" type="button">
+            <strong>覆盖当前配置</strong>
+            <small>删除现有分组并使用导入配置</small>
+          </button>
+          <button class="import-mode-button recommended" data-import-mode="merge" type="button">
+            <strong>合并到当前配置</strong>
+            <small>保留现有分组，同名分组自动重命名</small>
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="add-current-dialog" class="app-dialog">
+      <div class="manage-panel">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">CURRENT PAGE</p>
+            <h2>添加当前网页</h2>
+          </div>
+          <button class="dialog-close" data-dialog-close type="button" aria-label="关闭">×</button>
+        </div>
+        <p class="manage-intro">选择一个已有分组，或新建分组并直接添加。</p>
+        <div class="destination-list" id="current-destination-list"></div>
+        <div class="inline-new-group">
+          <input id="current-new-group-name" type="text" maxlength="50" placeholder="新分组名称" aria-label="新分组名称">
+          <button class="primary-button" id="current-new-group-button" type="button">新建并添加</button>
+        </div>
+        <p class="field-error" id="current-add-error" role="alert"></p>
+      </div>
+    </dialog>
+
+    <dialog id="window-dialog" class="app-dialog wide-dialog">
+      <div class="manage-panel">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">CURRENT WINDOW</p>
+            <h2>选择要保存的标签页</h2>
+          </div>
+          <button class="dialog-close" data-dialog-close type="button" aria-label="关闭">×</button>
+        </div>
+        <div class="selection-tools">
+          <span id="window-selection-summary"></span>
+          <div>
+            <button id="select-all-tabs" type="button">全选</button>
+            <button id="select-no-tabs" type="button">全不选</button>
+          </div>
+        </div>
+        <div class="tab-selection-list" id="tab-selection-list"></div>
+        <div class="destination-fields">
+          <label for="window-target-select">保存位置</label>
+          <select id="window-target-select"></select>
+          <div id="window-new-group-wrap">
+            <label for="window-new-group-name">新分组名称</label>
+            <input id="window-new-group-name" type="text" maxlength="50" placeholder="例如：本次调研">
+          </div>
+        </div>
+        <p class="field-error" id="window-error" role="alert"></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" data-dialog-close type="button">取消</button>
+          <button class="primary-button" id="save-selected-tabs-button" type="button">保存所选网页</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="bookmark-dialog" class="app-dialog">
+      <div class="manage-panel">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">BOOKMARKS</p>
+            <h2>从 Chrome 收藏夹导入</h2>
+          </div>
+          <button class="dialog-close" data-dialog-close type="button" aria-label="关闭">×</button>
+        </div>
+        <div class="destination-fields">
+          <label for="bookmark-folder-select">收藏夹文件夹</label>
+          <select id="bookmark-folder-select"></select>
+          <label class="check-row">
+            <input id="bookmark-recursive" type="checkbox" checked>
+            <span>递归导入子文件夹中的网址</span>
+          </label>
+          <label for="bookmark-target-mode">导入方式</label>
+          <select id="bookmark-target-mode">
+            <option value="new">导入为新分组</option>
+            <option value="existing">添加到现有分组</option>
+          </select>
+          <div id="bookmark-existing-wrap" hidden>
+            <label for="bookmark-existing-group">目标分组</label>
+            <select id="bookmark-existing-group"></select>
+          </div>
+        </div>
+        <p class="field-error" id="bookmark-error" role="alert"></p>
+        <div class="dialog-actions">
+          <button class="secondary-button" data-dialog-close type="button">取消</button>
+          <button class="primary-button" id="bookmark-confirm-button" type="button">开始导入</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="support-dialog" class="app-dialog" aria-labelledby="support-title">
+      <div class="manage-panel">
+        <div class="dialog-heading"><h2 id="support-title">支持 NestoraTabs</h2><button class="dialog-close" data-dialog-close type="button" aria-label="关闭">×</button></div>
+        <p class="manage-intro">NestoraTabs 是一款免费、开源的浏览器工具。如果它帮助你更方便地管理网页，欢迎自愿赞助开发。赞助完全自愿，不影响任何功能的使用。</p>
+        <div class="support-grid">
+          <figure><img src="assets/wechat-placeholder.svg" width="144" height="144" alt="微信收款二维码占位图，尚未提供真实收款码"><figcaption>微信 · 尚未开放</figcaption></figure>
+          <figure><img src="assets/alipay-placeholder.svg" width="144" height="144" alt="支付宝收款二维码占位图，尚未提供真实收款码"><figcaption>支付宝 · 尚未开放</figcaption></figure>
+        </div>
+        <p class="field-hint">以上为占位图，不能用于付款。</p>
+        <h3>Polygon 自愿赞助</h3>
+        <p class="field-hint">网络：Polygon。请在钱包中核对收款地址、网络和资产；本插件不会连接钱包或发起交易。转账公开可见且通常无法撤回。</p>
+        <code class="support-address">0xa61386253a47fEA0710fC39CBE40B84600274157</code>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <script src="core.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

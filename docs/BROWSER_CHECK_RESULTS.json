@@ -1,0 +1,61 @@
+{
+  "browser": "Bundled Chromium headless",
+  "browserVersion": "148.0.7778.96",
+  "date": "2026-10-29",
+  "results": [
+    {
+      "name": "MV3 actual Chromium loading",
+      "status": "PASS"
+    },
+    {
+      "name": "Support opt-in and local placeholder images",
+      "status": "PASS"
+    },
+    {
+      "name": "Create group and add site using actual UI/storage",
+      "status": "PASS"
+    },
+    {
+      "name": "Current-page save and duplicate prevention",
+      "status": "PASS"
+    },
+    {
+      "name": "Save current-window eligible tabs",
+      "status": "PASS"
+    },
+    {
+      "name": "Background add handler with actual Chrome storage",
+      "status": "PASS"
+    },
+    {
+      "name": "Bookmark import using actual Chrome bookmarks API",
+      "status": "PASS"
+    },
+    {
+      "name": "Group opening and forced new tabs with actual tabs API",
+      "status": "PASS"
+    },
+    {
+      "name": "JSON download and real file input import",
+      "status": "PASS"
+    },
+    {
+      "name": "Favicon data-image rendering",
+      "status": "PASS"
+    },
+    {
+      "name": "Browser restart retains local groups/order/data",
+      "status": "PASS"
+    },
+    {
+      "name": "Uncaught popup errors",
+      "status": "PASS"
+    }
+  ],
+  "unknown": [
+    "Native context-menu click dispatch",
+    "Toolbar bubble behavior in branded Google Chrome",
+    "Physical drag gesture ordering",
+    "In-place upgrade from baseline in same path"
+  ]
+}

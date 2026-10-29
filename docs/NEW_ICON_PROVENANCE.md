@@ -1,0 +1,3 @@
+# New icon provenance
+
+Created on 2026-10-29 for the authorized NestoraTabs rename. The prior TabNest SVG/PNG artwork is not reused. The new SVG and PNGs use explicitly authored geometric rectangles/lines/circles forming an N with two tab columns; no external image, font, platform logo or reference artwork was imported. PNGs were drawn with Pillow and downsampled; the generator is retained in tools/generate_icons.py. These new assets are made available under the existing project MIT terms. This record does not establish rights to the earlier application code, and is not a trademark clearance opinion.

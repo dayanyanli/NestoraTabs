@@ -1,0 +1,9 @@
+NestoraTabs v1.0.1 PUBLIC PRERELEASE
+
+Free to use. Support is entirely voluntary and never affects features.
+Baseline application-code provenance has not been fully verified. The supplied MIT notice is retained; it is not independent proof of all rights. New icons were drawn for this rename. The maintainer explicitly authorized publication with these disclosures.
+Main workflows passed actual Chromium tests. Native menu clicks, physical drag gestures, Chrome toolbar bubble and in-place upgrade remain unverified. This is not a fully verified stable release or Chrome Web Store approval.
+Load this third-party extension only if you trust its source and publisher. Export JSON backups before changes. Review source, audits and installation instructions:
+https://github.com/dayanyanli/NestoraTabs
+
+The Polygon address is maintainer-supplied; verify network, address and asset independently. WeChat/Alipay images are non-payable placeholders. No wallet connection or payment is initiated by this extension.

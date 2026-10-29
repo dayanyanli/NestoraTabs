@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新建分组并添加</title>
+    <link rel="stylesheet" href="context-new-group.css">
+  </head>
+  <body>
+    <main class="page-card">
+      <p class="eyebrow">NESTORATABS</p>
+      <h1>新建分组并添加</h1>
+      <section class="page-preview">
+        <div class="site-icon" id="site-icon" aria-hidden="true">↗</div>
+        <div>
+          <strong id="page-title"></strong>
+          <small id="page-url"></small>
+        </div>
+      </section>
+      <form id="new-group-form">
+        <label for="group-name">分组名称</label>
+        <input id="group-name" type="text" maxlength="50" placeholder="例如：每日工作" required autofocus>
+        <p class="error" id="form-error" role="alert"></p>
+        <div class="actions">
+          <button class="secondary" id="cancel-button" type="button">取消</button>
+          <button class="primary" type="submit">创建并添加</button>
+        </div>
+      </form>
+    </main>
+    <script src="core.js"></script>
+    <script src="context-new-group.js"></script>
+  </body>
+</html>
